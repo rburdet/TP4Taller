@@ -3,6 +3,7 @@
 
 #include "common_connection.h"
 #include "common_converter.h"
+#include "server_lock.h"
 
 class ServerConnection : public Connection {
 	private:
