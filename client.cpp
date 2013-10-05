@@ -13,6 +13,8 @@
 #include <iostream>
 #include "common_com.h"
 #include <stdint.h>
+#include "common_com.h"
+#include "common_converter.h"
 #define MYPORT 3490
  
 int main(int argc, char* argv[]){
@@ -47,6 +49,13 @@ int main(int argc, char* argv[]){
 	printf("mensaje: %s\n",buf);
 	printf("Received: %u\n",correctSize);
 	std::cout << "buffer: " << std::string(buf) << std::endl;
+	std::string MSG="PUERTO ";
+	MSG.append(Converter::convert(MYPORT));
+	MSG.append(" Aceptado. Recibiendo datos...");
+	Msg* toSend = createMsg(MSG);
+	if (sendAll(sd,toSend)==-1)
+		return -1;
+
 	close (sd);
 return 0;
 }
