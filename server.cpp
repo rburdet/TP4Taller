@@ -11,15 +11,21 @@
 #include <signal.h>
 #include "common_com.h"
 #include "server_connection.h"
+#include "common_thread.h"
+#include <iostream>
+
 #define MYPORT 3490
  // Puerto al que conectarán los usuarios
  // Cuántas conexiones pendientes se mantienen en cola
 
-int main(void){
-	struct sockaddr_in their_addr; 
+int main(int argc, char* argv[]){
+	//struct sockaddr_in their_addr; 
 	ServerConnection serv("127.0.0.1",MYPORT);
-	serv.connect();
-	serv.communicate();
-	printf("server: got connection from %s\n",inet_ntoa(their_addr.sin_addr));
+	serv.start();
+	//serv.connect();
+	//serv.communicate();
+
+	while (std::cin.get() != 'q');
+	//printf("server: got connection from %s\n",inet_ntoa(their_addr.sin_addr));
 	return 0;
 }

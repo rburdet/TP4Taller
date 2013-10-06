@@ -8,12 +8,14 @@
 
 class Converter{
 	public:
-		static std::string convert(int value){
+		static std::string convert(const std::string& begin,int value,const std::string& end=""){
+			std::string MSG=begin;
 			std::string str;
 			std::ostringstream converter;
 			converter << value;
-			str = converter.str();
-			return str;
+			MSG.append(converter.str());
+			MSG.append(end);
+			return MSG;
 		}
 };
 

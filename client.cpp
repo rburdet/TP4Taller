@@ -49,9 +49,8 @@ int main(int argc, char* argv[]){
 	printf("mensaje: %s\n",buf);
 	printf("Received: %u\n",correctSize);
 	std::cout << "buffer: " << std::string(buf) << std::endl;
-	std::string MSG="PUERTO ";
-	MSG.append(Converter::convert(MYPORT));
-	MSG.append(" Aceptado. Recibiendo datos...");
+	std::string MSG;
+	MSG.append(Converter::convert("PUERTO ",MYPORT," Aceptado. Recibiendo datos..."));
 	Msg* toSend = createMsg(MSG);
 	if (sendAll(sd,toSend)==-1)
 		return -1;
