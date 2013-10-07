@@ -12,6 +12,8 @@
 #include "common_com.h"
 #include "server_connection.h"
 #include "common_thread.h"
+#include "common_list.h"
+#include "common_parser.h"
 #include <iostream>
 
 #define MYPORT 3490
@@ -19,9 +21,16 @@
  // Cuántas conexiones pendientes se mantienen en cola
 
 int main(int argc, char* argv[]){
-	//struct sockaddr_in their_addr; 
-	ServerConnection serv("127.0.0.1",MYPORT);
-	serv.start();
+	if (argc!=2)
+		return 0;
+	List portList;
+	parsePorts(&portList, argv[1]);
+	Node* aux;
+	for ( aux = portList.getFirst() ; aux != NULL ; aux = aux->getNext() ){
+		ServerConnection serv("127.0.0.1",aux->getData());
+		serv.start();
+		std::cout << aux->getData() << std::endl;
+	}
 	//serv.connect();
 	//serv.communicate();
 

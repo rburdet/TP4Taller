@@ -2,7 +2,6 @@
 #define CLIENT_FACTORY_H
 
 #include <iostream>
-#include "common_thread.h"
 #define BACKLOG 10
 
 class Connection{
@@ -20,6 +19,7 @@ class Connection{
 			my_addr.sin_port = htons(port);
 			my_addr.sin_addr.s_addr = inet_addr(ip.c_str());
 			memset(&(my_addr.sin_zero), '\0', 8);
+			std::cout<<"se crea bien el socket"<<std::endl;
 		}
 		int getSocket(){return this->sd;}
 };

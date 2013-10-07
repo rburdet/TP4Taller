@@ -16,9 +16,14 @@ class Thread{
 	public:
 		void start(){
 			pthread_create(&t,NULL,starter,this);
+			std::cout<<"LEVANTE UN THREAD " << std::endl;
 		}
 		void join(){pthread_join(t,NULL);}
 		virtual void run()=0;
+		virtual ~Thread(){
+			std::cout<<"MATE UN THREAD " << std::endl;
+			pthread_exit(NULL);
+		}
 };
 
 #endif
