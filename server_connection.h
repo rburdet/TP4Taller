@@ -11,7 +11,6 @@ class ServerConnection : public Thread , public Connection {
 	private:
 		struct sockaddr_in connected_addr;
 		Mutex mutex;
-		char* buf;
 		
 	public:
 		void run(){
@@ -22,10 +21,12 @@ class ServerConnection : public Thread , public Connection {
 				std::cout<<Converter::convert("PUERTO ",port,". Conexión aceptada.")<<std::endl;
 				const std::string& beg = Converter::convert("PUERTO ",port,". Recibidos ");
 				std::cout<<Converter::convert(beg,dataReceived, " bytes.")<<std::endl;
+				std::cout<<"PUERTO "<<port<< ". Conexión cerrada." << std::endl;
 			}
 		}
 
 		ServerConnection(const std::string& ip, int port) : Connection(ip, port){}
+
 		int connect(){
 			int yes=1;
 			if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1) {
@@ -33,13 +34,13 @@ class ServerConnection : public Thread , public Connection {
 			    exit(1);
 			}			
 			if (bind(sd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr))== -1) {
-				std::cerr<<"error on binding"<<std::endl;
+				//std::cerr<<"error on binding"<<std::endl;
 				std::cout<<Converter::convert("PUERTO ",port,". Error.")<<std::endl;
 				return -1;
 			}
 			if (listen(sd, BACKLOG) == -1) {
 				//std::cout<<Converter::convert("PUERTO ",port,". Error.")<<std::endl;
-				std::cerr<< "error on listening"<<std::endl;
+				//std::cerr<< "error on listening"<<std::endl;
 				return -1;
 			}
 			std::cout<<Converter::convert("PUERTO ",port,". Abierto.")<<std::endl;
@@ -62,12 +63,6 @@ class ServerConnection : public Thread , public Connection {
 			socklen_t sin_size;
 			sin_size = sizeof(struct sockaddr_in);
 			if ((new_fd = accept(sd, (struct sockaddr *)&connected_addr,&sin_size)) == -1) {
-			//TODO:
-			//Mensaje de verificacion con cantidad recibida 
-			//Se cierra y se reinicia el ciclo
-			//if (connect(sd, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) == -1 ){
-			//	std::cerr<< " Error conectando " << std::endl;
-			//}
 				std::cout << "ERROR EN ACCEPT " << std::endl;	
 				perror("accept");
 				exit(1);
@@ -75,6 +70,11 @@ class ServerConnection : public Thread , public Connection {
 			}
 			if ((dataReceived = getData(new_fd)) == 0)
 				return 0;
+			//Mando mensaje para confirmar datos, no tengo que verificar 
+			//la integridad de los datos. El sendAll manda todo
+			std::string MSG=Converter::convert("",dataReceived);
+			Msg* toSend = createMsg(MSG);
+			sendAll(new_fd,toSend);
 			return dataReceived;
 		}
 
@@ -97,8 +97,7 @@ class ServerConnection : public Thread , public Connection {
 			return ntohs(size);
 		}
 		~ServerConnection(){
-			shutdown(this->sd,SHUT_RDWR);
-			std::cout<<"MATE UN SERVIDOR " << std::endl;
+			//shutdown(this->sd,SHUT_RDWR);
 		}
 };
 

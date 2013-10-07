@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include "common_list.h"
 #include "common_node.h"
+#include "server_connection.h"
 
-void parsePorts(List* portList, char* ports){
+
+void parsePorts(List<>* portList, char* ports){
 	std::string portsStr = std::string(ports);
 	std::string aport;
 	portsStr.push_back(',');
@@ -16,7 +18,7 @@ void parsePorts(List* portList, char* ports){
 		if (fpos != std::string::npos){
 			aport = portsStr.substr(0,fpos);
 			portsStr.erase(0,fpos+1);
-			Node* aux = new Node(atoi(aport.c_str()));
+			Node<>* aux = new Node<>(atoi(aport.c_str()));
 			portList->addNode(aux);
 		}
 	}	

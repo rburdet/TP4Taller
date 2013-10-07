@@ -1,13 +1,14 @@
 #ifndef NODE_H
 #define NODE_H
 
+template<class T=int>
 class Node{
 	private:
-		unsigned data;
-		Node* next;
+		T data;
+		Node<T>* next;
 	
 	public:
-		Node(int data){
+		Node(T data){
 			this->data=data;
 			this->next=NULL;
 		}
@@ -21,7 +22,7 @@ class Node{
 		void setNext(Node* next){
 			this->next=next;
 		}
-		int getData(){
+		T getData(){
 			return this->data;
 		}
 };

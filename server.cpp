@@ -23,18 +23,23 @@
 int main(int argc, char* argv[]){
 	if (argc!=2)
 		return 0;
-	List portList;
+	List<> portList;
 	parsePorts(&portList, argv[1]);
-	Node* aux;
+	List<ServerConnection*> threadList;
+	Node<>* aux;
 	for ( aux = portList.getFirst() ; aux != NULL ; aux = aux->getNext() ){
-		ServerConnection serv("127.0.0.1",aux->getData());
-		serv.start();
-		std::cout << aux->getData() << std::endl;
+		ServerConnection* serv = new ServerConnection("127.0.0.1",aux->getData());
+		Node<ServerConnection*>* aux2 = new Node<ServerConnection*>(serv);
+		threadList.addNode(aux2);
 	}
-	//serv.connect();
-	//serv.communicate();
-
+	Node<ServerConnection*>* aux2;
+	for ( aux2 = threadList.getFirst() ; aux2 != NULL ; aux2 = aux2->getNext() ){
+		(aux2->getData())->start();
+	}
 	while (std::cin.get() != 'q');
-	//printf("server: got connection from %s\n",inet_ntoa(their_addr.sin_addr));
+
+	for ( aux2 = threadList.getFirst() ; aux2 != NULL ; aux2 = aux2->getNext() ){
+		delete (aux2->getData());
+	}
 	return 0;
 }

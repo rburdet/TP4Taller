@@ -23,7 +23,10 @@ int main(int argc, char* argv[]){
 	std::string IP;
 	int port = parseIP_PORT(argv[1],IP);
 	ClientConnection client(IP,port);
-	client.startconnection();
-	client.sendFile("client1.in");
+	std::string fileName="";
+	if (argc==3)
+		fileName = std::string(argv[2]);
+	client.startconnection(fileName);
+	//client.sendFile(fileName);
 	return 0;
 }

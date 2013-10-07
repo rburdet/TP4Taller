@@ -4,10 +4,11 @@
 #include <iostream>
 #include "common_node.h"
 
+template<class T=int>
 class List{
 	private:
-		Node* first;
-		Node* actual;
+		Node<T>* first;
+		Node<T>* actual;
 	
 	public:
 		List() : first(NULL), actual(NULL){}
@@ -16,11 +17,11 @@ class List{
 			if (this->first!=NULL)
 				delete this->first;
 		}
-		Node* getFirst(){
+		Node<T>* getFirst(){
 			return this->first;
 		}	
 
-		void addNode(Node* node){
+		void addNode(Node<T>* node){
 			if (this->first == NULL){
 				this->first=node;
 				this->actual=node;
@@ -30,11 +31,11 @@ class List{
 			}
 		}
 			
-		Node* searchNode(int data){
+		Node<T>* searchNode(T data){
 			if (this->first->getData()==data){
 				return this->first;
 			}else{
-				Node* aux=this->first;
+				Node<T>* aux=this->first;
 				while (aux != NULL){
 					if (aux->getData() == data)
 						return aux;

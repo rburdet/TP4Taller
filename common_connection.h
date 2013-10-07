@@ -1,6 +1,7 @@
 #ifndef CLIENT_FACTORY_H
 #define CLIENT_FACTORY_H
 
+#include <stdint.h>
 #include <iostream>
 #define BACKLOG 10
 
@@ -9,6 +10,8 @@ class Connection{
 		struct sockaddr_in my_addr;
 		int sd;
 		int port;
+		char* buf;
+
 	public:
 		Connection(const std::string& ip, int port){
 			this->port=port;
@@ -19,9 +22,25 @@ class Connection{
 			my_addr.sin_port = htons(port);
 			my_addr.sin_addr.s_addr = inet_addr(ip.c_str());
 			memset(&(my_addr.sin_zero), '\0', 8);
-			std::cout<<"se crea bien el socket"<<std::endl;
 		}
 		int getSocket(){return this->sd;}
+
+		uint32_t getData(int new_fd){
+			uint32_t size;
+			if (recv(new_fd,&size,sizeof(size),0) == -1){
+				perror("todo mal reciviendo");
+				return 0;
+			}
+			int correctSize = htons(size);
+			buf = (char*)malloc(correctSize);
+			if (recv(new_fd,buf,correctSize,0) == -1){
+				perror("llego mal el mensaje");
+				free (buf);
+				return 0;
+			}
+			free (buf);
+			return ntohs(size);
+		}
 };
 
 #endif
