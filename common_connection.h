@@ -1,8 +1,15 @@
-#ifndef CLIENT_FACTORY_H
-#define CLIENT_FACTORY_H
+#ifndef CONNECTION_H
+#define CONNECTION_H
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 #include <iostream>
+#include "common_com.h"
 #define BACKLOG 10
 
 class Connection{
@@ -23,18 +30,15 @@ class Connection{
 			my_addr.sin_addr.s_addr = inet_addr(ip.c_str());
 			memset(&(my_addr.sin_zero), '\0', 8);
 		}
-		int getSocket(){return this->sd;}
 
 		uint32_t getData(int new_fd){
 			uint32_t size;
 			if (recv(new_fd,&size,sizeof(size),0) == -1){
-				perror("todo mal reciviendo");
 				return 0;
 			}
 			int correctSize = htons(size);
 			buf = (char*)malloc(correctSize);
 			if (recv(new_fd,buf,correctSize,0) == -1){
-				perror("llego mal el mensaje");
 				free (buf);
 				return 0;
 			}

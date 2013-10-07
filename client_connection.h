@@ -46,10 +46,10 @@ class ClientConnection : public Connection{
 				ss << c;
 				c = in->get();
 			}
-			Msg* toSend = createMsg(ss.str());
-			if (sendAll(sd,toSend)==-1)
+			Msg toSend(ss.str());
+			if (toSend.sendAll(sd)==-1)
 				return 0;
-			return toSend->length;
+			return toSend.getLength();
 		}
 };
 

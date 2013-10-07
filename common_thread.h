@@ -2,8 +2,6 @@
 #define COMMON_THREAD_H
 
 #include <pthread.h>
-#include "common_mutex.h"
-#include "server_connection.h"
 class Thread{
 	private:
 		pthread_t t;

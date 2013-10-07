@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 //Esta clase es utilizada para convertir numeros en strings
+//y para formar mensajes con palabras y numeros
 //para facilitar la comunicacion entre servidor y cliente
 
 class Converter{

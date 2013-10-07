@@ -7,15 +7,24 @@
 #include <stdint.h>
 #include <string>
 
-typedef struct TMsg{
-	const char* msg;
-	uint32_t length;
-} Msg;
+//typedef struct TMsg{
+//	const char* msg;
+//	uint32_t length;
+//} Msg;
+//
+class Msg{
+	private:
+		const char* msg;
+		uint32_t length;
+	
+	public:
+	Msg(std::string aMsg);
+	uint32_t getLength();
+	int sendLength(int sd);
+	int sendMsg(int sd);
+	int sendAll(int sd);
+	~Msg();
 
-Msg* createMsg(std::string aMsg);
-int sendLength(uint sd,int32_t length);
-int sendMsg(int sd,Msg* aMsg);
-int sendAll(int sd,Msg* aMsg);
-
+};
 
 #endif
